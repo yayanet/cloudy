@@ -1,0 +1,4 @@
+RewriteEngine on
+RewriteRule ^$ index.php [L]
+RewriteCond $1 !^(index\.php|robots\.txt|static)
+RewriteRule ^(.*)$ index.php [L]
