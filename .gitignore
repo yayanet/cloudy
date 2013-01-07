@@ -6,3 +6,4 @@
 data/smarty_compile/*.php
 data/logs/*.log
 data/smarty_cache/*.php
+app/configs/mysql.config.php

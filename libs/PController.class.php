@@ -13,12 +13,6 @@ class PController
 	
 
 	function call_method($methodName, $parameters) {
-	
-	    if (empty($methodName)) {
-	        // TODO: Default method name
-	        $methodName = 'index';
-	    }
-	    
 	    $methodName = strtolower($methodName);
 	    
 	    if (method_exists($this, $methodName)) {
@@ -56,7 +50,7 @@ class PController
         // Content template
         if (empty($content_tpl)) {
             global $application;
-            $contentTpl = $application->controllerName . '/' . $application->methodName . '.html';
+            $contentTpl = $application->router->controllerName . '/' . $application->router->methodName . '.html';
         }
         $this->smarty->assign('content_tpl_file', $contentTpl);
 

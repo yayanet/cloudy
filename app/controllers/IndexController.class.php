@@ -1,9 +1,9 @@
 <?php
 class IndexController extends PController
 {
-    public function index()
+    public function index($name = 'Cloudy')
     {
-        $this->assign('message', 'Hello Patrick!');
+        $this->assign('message', "Hello {$name}!");
         
         $this->display();
     }
