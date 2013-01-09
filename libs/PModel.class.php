@@ -6,7 +6,7 @@ class PModel
     /**
      * @var PPDO
      */
-	public $db = NULL;
+	static protected $db = NULL;
 	
 	/**
 	 * @var PDOStatement
@@ -26,18 +26,16 @@ class PModel
 	}
 	
 	
-	public function __construct()
+	protected function __construct()
 	{
-	    static $sharedDB = NULL;
-	    if ($sharedDB == NULL) {
-	        $sharedDB = new PPDO();
+	    if (self::$db == NULL) {
+	        self::$db = new PPDO();
 	    }
-	    $this->db = $sharedDB;
 	}
 	
 	protected function query($sql, $parameters = array())
 	{
-	    $statement = $this->db->prepare($sql);
+	    $statement = self::$db->prepare($sql);
 	    $this->lastStatement = $statement;
 	    
 	    foreach ($parameters as $key => $value) {
@@ -89,7 +87,7 @@ class PModel
 	
 	protected function insert_id()
 	{
-	    return $this->db->lastInsertId();
+	    return self::$db->lastInsertId();
 	}
 	
 	////////////////////////////////////////////////////////////////

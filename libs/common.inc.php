@@ -19,3 +19,7 @@ function p_string($from, $key = NULL)
     
     return strval($from);
 }
+
+function p_get_unique_id () {
+    return md5(uniqid(mt_rand(), true));
+}
