@@ -9,6 +9,16 @@ class ApiController extends PController
     {
         echo json_encode($response);
     }
+
+    public function error($errorName)
+    {
+        $this->render(array('error' => $errorName));
+    }
+
+    public function permission_denied()
+    {
+        $this->error('permission_denied');
+    }
     
     public function invalid_request()
     {
@@ -20,12 +30,25 @@ class ApiController extends PController
         $this->render($response);
     }
     
-    ////// Override
-    
-    function call_method($methodName, $parameters)
+    public function check_login()
     {
-        $methodName = strtolower($methodName);
-         
+        if (empty(self::$userId)) {
+            $this->render(array('error' => 'login_required'));
+            return FALSE;
+        }
+        else {
+            return TRUE;
+        }
+    }
+    
+    ////// Override 
+    function call_method($methodName, $parameters) {
+        $methodName = strtolower($methodName); 
+
+        if (! method_exists($this, $methodName) && method_exists($this, $methodName . '_')) {
+            $methodName = $methodName . '_';
+        }
+
         if (method_exists($this, $methodName)) {
             
             // Check session id
@@ -46,7 +69,11 @@ class ApiController extends PController
         $method = strtolower($application->router->controllerName . '/' . $application->router->methodName);
         $excludeMethods = array('account/session');
         
-        if (empty($_REQUEST['session_id']) && ! in_array($method, $excludeMethods)) {
+        if (in_array($method, $excludeMethods)) {
+            return TRUE;
+        }
+
+        if (empty($_REQUEST['session_id'])) {
             $this->render(array('error' => 'session_id_cannot_be_empty'));
             return FALSE;
         }
