@@ -4,10 +4,7 @@ class NotebookController extends ApiController
 {
     public function add()
     {
-        if (empty($_REQUEST['name'])) {
-            $this->invalid_request('name');
-            return;
-        }
+        if (! $this->check_parameters('name')) return;
 
         if (! $this->check_login()) return;
         
@@ -26,10 +23,7 @@ class NotebookController extends ApiController
 
     public function remove()
     {
-        if (empty($_REQUEST['notebook_id'])) {
-            $this->invalid_request('notebook_id');
-            return;
-        }
+        if (! $this->check_parameters('notebook_id')) return;
 
         if (! $this->check_login()) return;
 
@@ -59,10 +53,7 @@ class NotebookController extends ApiController
 
     public function rename()
     {
-        if (empty($_REQUEST['notebook_id']) OR empty($_REQUEST['name'])) {
-            $this->invalid_request('notebook_id', 'name');
-            return;
-        }
+        if (! $this->check_parameters('notebook_id', 'name')) return;
 
         if (! $this->check_login()) return;
 

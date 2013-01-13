@@ -4,10 +4,7 @@ class AccountController extends ApiController
 {
     public function session()
     {
-        if (empty($_REQUEST['client_id'])) {
-            $this->invalid_request('client_id');
-            return;
-        }
+        if (! $this->check_parameters('client_id')) return;
         
         // TOOD: check client id
         
@@ -24,10 +21,7 @@ class AccountController extends ApiController
     
     public function login()
     {
-        if (empty($_REQUEST['email']) OR empty($_REQUEST['password'])) {
-            $this->invalid_request('email', 'password');
-            return;
-        }
+        if (! $this->check_parameters('email', 'password')) return;
         
         $email = $_REQUEST['email'];
         $password = $_REQUEST['password'];

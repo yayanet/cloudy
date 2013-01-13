@@ -20,14 +20,22 @@ class ApiController extends PController
         $this->error('permission_denied');
     }
     
-    public function invalid_request()
+    public function check_parameters()
     {
-        $response = array('error' => 'invalid_request');
         $params = func_get_args();
-        if (! empty($params)) {
-            $response['message'] = implode(', ', $params) . ' cannot be empty';
+        
+        foreach ($params as $parameter) {
+            if (empty($_REQUEST[$parameter])) {
+                $response = array(
+                        'error' => 'invalid_request',
+                        'message' => $parameter . ' cannot be empty',
+                        );
+                $this->render($response);
+                return FALSE;
+            }
         }
-        $this->render($response);
+        
+        return TRUE;
     }
     
     public function check_login()
