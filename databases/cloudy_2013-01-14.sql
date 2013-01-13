@@ -7,7 +7,7 @@
 #
 # Host: 127.0.0.1 (MySQL 5.5.17)
 # Database: cloudy
-# Generation Time: 2013-01-09 17:52:47 +0000
+# Generation Time: 2013-01-13 17:28:27 +0000
 # ************************************************************
 
 
@@ -28,10 +28,11 @@ DROP TABLE IF EXISTS `t_note`;
 CREATE TABLE `t_note` (
   `note_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `content` text,
-  `ctime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `ctime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `update_time` timestamp NULL DEFAULT NULL,
   `notebook_id` int(11) NOT NULL,
-  `version` int(11) NOT NULL,
+  `version` int(11) NOT NULL DEFAULT '1',
+  `status` tinyint(4) NOT NULL COMMENT '-1:deleted',
   PRIMARY KEY (`note_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
