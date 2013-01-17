@@ -9,10 +9,11 @@ class NoteModel extends PModel
         return parent::getInstance(get_class());
     }
     
-    public function add($notebookId, $content)
+    public function add($notebookId, $userId, $content)
     {
         $data = array(
-                'notebook_id' => $notebookId,
+                'notebook_id' => intval($notebookId),
+                'user_id' => intval($userId),
                 'content' => $content
         );
         return $this->insert($data, 't_note');
@@ -60,12 +61,15 @@ class NoteModel extends PModel
         return isset($result[0]) ? $result[0] : array();
     }
     
+    public function get_list_by_user_id($userId)
+    {
+        $data = array('_user_id' => $userId);
+        $sql = "SELECT * FROM t_note WHERE user_id=:_user_id AND status>-1";
+        return $this->query($sql, $data);
+    }
+    
     public function get_list_by_notebook_id($notebookId)
     {
-        if (empty($notebookId)) {
-            return array();
-        }
-    
         $data = array('_notebook_id' => $notebookId);
         $sql = "SELECT * FROM t_note WHERE notebook_id=:_notebook_id AND status>-1";
         return $this->query($sql, $data);

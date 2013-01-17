@@ -4,11 +4,16 @@ class NoteController extends ApiController
 {
     public function add()
     {
-        if (! $this->check_parameters('notebook_id', 'content')) return;
-
+        if (! $this->check_parameters('content')) return;
+        
         if (! $this->check_login()) return;
         
-        $noteId = NoteModel::getInstance()->add(intval($_REQUEST['notebook_id']), $_REQUEST['content']);
+        $notebookId = 0;
+        if (isset($_REQUEST['notebook_id'])) {
+            $notebookId = intval($_REQUEST['notebook_id']);
+        }
+        
+        $noteId = NoteModel::getInstance()->add($notebookId, self::$userId, $_REQUEST['content']);
         if (empty($noteId)) {
             $response = array('error' => 'add_note_failed');
         }
@@ -73,12 +78,20 @@ class NoteController extends ApiController
 
     public function list_()
     {
-        if (! $this->check_parameters('notebook_id')) return;
-        
         if (! $this->check_login()) return;
-
-        $notebookId = intval($_REQUEST['notebook_id']);
-        $noteList = NoteModel::getInstance()->get_list_by_notebook_id($notebookId);
+        
+        $notebookId = 0;
+        if (isset($_REQUEST['notebook_id'])) {
+            $notebookId = intval($_REQUEST['notebook_id']);
+        }
+        
+        if ($notebookId == 0) {
+            $noteList = NoteModel::getInstance()->get_list_by_user_id(self::$userId);
+        }
+        else {
+            $noteList = NoteModel::getInstance()->get_list_by_notebook_id($notebookId);            
+        }
+        
         $responseList = ApiHelper::instance()->note_list_for_response($noteList);
         $this->render(array('data' => $responseList));
     }

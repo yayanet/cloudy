@@ -45,6 +45,7 @@ class ApiHelper
                 'note_id' => $note['note_id'],
                 'notebook_id' => $note['notebook_id'],
                 'content' => $note['content'],
+                'title' => ltrim($note['content']),
                 'update_time' => $note['update_time'],
                 'version' => $note['version']
         );
