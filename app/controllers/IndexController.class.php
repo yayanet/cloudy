@@ -1,10 +1,8 @@
 <?php
 class IndexController extends PController
 {
-    public function index($name = 'Cloudy')
+    public function index()
     {
-        $this->assign('message', "Hello {$name}!");
-        
-        $this->display();
+        header('Location: /note');
     }
 }

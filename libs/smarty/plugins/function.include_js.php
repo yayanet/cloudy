@@ -23,7 +23,7 @@ function smarty_function_include_js($params, $template)
 	
 	if (! empty($params['file'])) {
 		$file = $params['file'] . '.js?v=' . STATIC_FILE_VERSION;
-		$output = '<script type="text/javascript" src="/js/' . $file . '"></script>';
+		$output = '<script type="text/javascript" src="/static/js/' . $file . '"></script>';
 	}
 	
     return $output;

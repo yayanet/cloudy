@@ -58,7 +58,7 @@ class PController
         $this->smarty->display('frame.html');
     }
 
-    public function setPageTitle($page_title, $needSuffix = TRUE)
+    public function set_page_title($page_title, $needSuffix = TRUE)
     {
         if ($needSuffix) {
             global $config;

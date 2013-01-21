@@ -23,7 +23,7 @@ function smarty_function_include_css($params, $template)
 	
 	if (! empty($params['file'])) {
 		$file = $params['file'] . '.css?v=' . STATIC_FILE_VERSION;
-		$output = '<link rel="stylesheet" type="text/css" href="/css/' . $file . '" />';
+		$output = '<link rel="stylesheet" type="text/css" href="/static/css/' . $file . '" />';
 	}
 	
     return $output;

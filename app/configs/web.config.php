@@ -19,7 +19,7 @@ $config['cookie']['domain']    = $_SERVER['SERVER_NAME'];
 $config['cookie']['path']      = '/';
 
 // Website config
-$config['website']['name']    = 'A Patrick Web';
+$config['website']['name']    = 'Cloudy';
 $config['website']['default_title']       = $config['website']['name'];
 $config['website']['default_keywords']    = '';
 $config['website']['default_description'] = '';
