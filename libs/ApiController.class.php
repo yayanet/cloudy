@@ -1,10 +1,6 @@
 <?php
 class ApiController extends PController
 {
-    static public $sessionId    = NULL;
-    static public $userId       = NULL;
-    static public $clientId     = NULL;
-    
     public function render($response)
     {
         echo json_encode($response);
@@ -26,7 +22,7 @@ class ApiController extends PController
         if (! empty($message)) {
             $response['message'] = $message;
         }
-        $this->render($message);
+        $this->render($response);
     }
     
     public function check_parameters()
@@ -73,10 +69,29 @@ class ApiController extends PController
             PUtil::page_not_found();
         }
     }
+
+    protected function init_smarty()
+    {
+        // Just for replacing the default action,
+        // because we don't need smarty here
+    }
+
+    protected function init_session()
+    {
+        if (empty($_REQUEST['session_id'])) return;
+
+        $sessionId = $_REQUEST['session_id'];
+        $session = SessionModel::getInstance()->get_by_id($_REQUEST['session_id']);
+        if (! empty($session)) {
+            self::$sessionId = $session['session_id'];
+            self::$userId = $session['user_id'];
+            self::$clientId = $session['client_id'];
+        }
+    }
     
     /////
     
-    private function check_session_id()
+    protected function check_session_id()
     { 
         global $application;
         $method = strtolower($application->router->controllerName . '/' . $application->router->methodName);
@@ -91,16 +106,11 @@ class ApiController extends PController
             return FALSE;
         }
         
-        $session = SessionModel::getInstance()->get_by_id($_REQUEST['session_id']);
-        if (empty($session)) {
+        if (empty(self::$sessionId)) {
             $this->render(array('error' => 'invalid_session_id'));
             return FALSE;
         }
-        
-        self::$sessionId = $session['session_id'];
-        self::$userId = $session['user_id'];
-        self::$clientId = $session['client_id'];
-        
+
         return TRUE;
     }
 }

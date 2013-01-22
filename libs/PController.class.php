@@ -4,14 +4,17 @@ class PController
 {
     var $smarty = NULL;
     var $smarty_debug = FALSE;
+
+    static public $sessionId    = NULL;
+    static public $userId       = NULL;
+    static public $clientId     = NULL;
     
 	function __construct()
 	{
-	    // Create smarty instance
-	    $this->smarty = new PSmarty();
+        $this->init_smarty();
+        $this->init_session();
 	}
 	
-
 	function call_method($methodName, $parameters) {
 	    $methodName = strtolower($methodName);
 	    
@@ -22,6 +25,17 @@ class PController
 	        PUtil::page_not_found();
 	    }
 	}
+
+
+    public function is_submit()
+    {
+        return isset($_REQUEST['is_submit']);
+    }
+
+    public function is_ajax()
+    {
+        return isset($_REQUEST['is_ajax']);
+    }
 	
 	////////////////////////////////////////////////////////////////////////////
 	// For display
@@ -66,5 +80,44 @@ class PController
         }
 
         $this->assign('WEB_TITLE', $page_title);
+    }
+
+    protected function init_smarty()
+    {
+	    // Create smarty instance
+	    $this->smarty = new PSmarty();
+    }
+
+    //////////
+    protected function init_session()
+    {
+        if (empty($_COOKIE['cloudy_session'])) {
+            $this->create_temporary_session();
+            return;
+        }
+
+        $sessionId = $_COOKIE['cloudy_session'];
+        $session = SessionModel::getInstance()->get_by_id($sessionId);
+        if (! empty($session)) {
+ 
+            self::$sessionId = $session['session_id'];
+            self::$userId = $session['user_id'];
+            self::$clientId = $session['client_id'];
+        }
+        else {
+            self::$sessionId = $sessionId;
+            self::$userId = 0;
+            self::$clientId = 1;
+        }
+    }
+
+    protected function create_temporary_session()
+    {
+        $sessionId = p_get_unique_id();
+        PUtil::set_cookie('cloudy_session', $sessionId);
+        
+        self::$sessionId = $sessionId;
+        self::$userId = 0;
+        self::$clientId = 1;
     }
 }

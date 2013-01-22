@@ -5,4 +5,12 @@ class IndexController extends PController
     {
         header('Location: /note');
     }
+
+    public function test()
+    {
+        echo 'test';
+        echo self::$sessionId;
+        var_dump(self::$userId);
+        var_dump(self::$clientId);
+    }
 }
