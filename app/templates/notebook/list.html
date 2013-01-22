@@ -1,0 +1,10 @@
+<ul class="nav nav-list">
+    <li class="nav-header">笔记本</li>
+    <li class="notebook-item" notebook-id="0"><a href="#">(全部)<span class="badge badge-info pull-right">1</span></a></li>
+{foreach from=$notebook_list item=notebook}
+    <li class="notebook-item" notebook-id="{$notebook.notebook_id}"><a href="#">{$notebook.name}<span class="badge badge-info pull-right">1</span></a></li>
+{foreachelse}
+    <li>No notebooks</li>
+{/foreach}
+
+</ul>

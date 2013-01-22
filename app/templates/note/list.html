@@ -1,0 +1,8 @@
+<ul class="nav nav-list">
+    <li class="nav-header">笔记</li>
+{foreach from=$note_list item=note}
+    <li><a href="#">{$note.content|truncate:12}</a></li>
+{foreachelse}
+    <li>No notes</li>
+{/foreach}
+</ul>

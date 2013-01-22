@@ -17,7 +17,11 @@ class PController
 	
 	function call_method($methodName, $parameters) {
 	    $methodName = strtolower($methodName);
-	    
+
+        if (! method_exists($this, $methodName) && method_exists($this, $methodName . '_')) {
+            $methodName = $methodName . '_';
+        }    
+
 	    if (method_exists($this, $methodName)) {
 	        call_user_func_array(array($this, $methodName), $parameters);
 	    }
@@ -55,31 +59,38 @@ class PController
 	
 	/**
 	*
-	* @param string $content_tpl   content template name, if not given, $currentAction/$currentMethod.html will be instead.
+	* @param string $contentTpl   content template name, if not given, $currentAction/$currentMethod.html will be instead.
+    * @param bool   $useFrame 
 	*/
-    public function display($content_tpl = '')
+    public function display($contentTpl = '', $useFrame = TRUE)
     {
         // TODO: Assign common varibles(user id, nickname etc.)
+        
 
         // Content template
-        if (empty($content_tpl)) {
+        if (empty($contentTpl)) {
             global $application;
-            $contentTpl = $application->router->controllerName . '/' . $application->router->methodName . '.html';
+            $contentTpl = strtolower($application->router->controllerName . '/' . $application->router->methodName . '.html');
         }
-        $this->smarty->assign('content_tpl_file', $contentTpl);
 
         // Display
-        $this->smarty->display('frame.html');
+        if ($useFrame) {
+            $this->smarty->assign('content_tpl_file', $contentTpl);
+            $this->smarty->display('frame.html');
+        }
+        else {
+            $this->smarty->display($contentTpl);
+        }
     }
 
-    public function set_page_title($page_title, $needSuffix = TRUE)
+    public function set_page_title($pageTitle, $needSuffix = TRUE)
     {
         if ($needSuffix) {
             global $config;
-            $page_title .= " - " . $config['website']['name'];
+            $pageTitle .= " - " . $config['website']['name'];
         }
 
-        $this->assign('WEB_TITLE', $page_title);
+        $this->assign('WEB_TITLE', $pageTitle);
     }
 
     protected function init_smarty()
